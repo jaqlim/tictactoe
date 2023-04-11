@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const gameBoard = document.getElementById("game-board");
     const resetButton = document.getElementById("reset");
     let currentPlayer = "X";
-    let gameState = [
+    let boardState = [
       ["", "", ""],
       ["", "", ""],
       ["", "", ""],
@@ -11,9 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const checkWinner = () => {
       for (let row = 0; row < 3; row++) {
         if (
-          gameState[row][0] !== "" &&
-          gameState[row][0] === gameState[row][1] &&
-          gameState[row][0] === gameState[row][2]
+          boardState[row][0] !== "" &&
+          boardState[row][0] === boardState[row][1] &&
+          boardState[row][0] === boardState[row][2]
         ) {
           return true;
         }
@@ -21,26 +21,26 @@ document.addEventListener("DOMContentLoaded", () => {
   
       for (let col = 0; col < 3; col++) {
         if (
-          gameState[0][col] !== "" &&
-          gameState[0][col] === gameState[1][col] &&
-          gameState[0][col] === gameState[2][col]
+          boardState[0][col] !== "" &&
+          boardState[0][col] === boardState[1][col] &&
+          boardState[0][col] === boardState[2][col]
         ) {
           return true;
         }
       }
   
       if (
-        gameState[0][0] !== "" &&
-        gameState[0][0] === gameState[1][1] &&
-        gameState[0][0] === gameState[2][2]
+        boardState[0][0] !== "" &&
+        boardState[0][0] === boardState[1][1] &&
+        boardState[0][0] === boardState[2][2]
       ) {
         return true;
       }
   
       if (
-        gameState[0][2] !== "" &&
-        gameState[0][2] === gameState[1][1] &&
-        gameState[0][2] === gameState[2][0]
+        boardState[0][2] !== "" &&
+        boardState[0][2] === boardState[1][1] &&
+        boardState[0][2] === boardState[2][0]
       ) {
         return true;
         }
@@ -51,15 +51,15 @@ document.addEventListener("DOMContentLoaded", () => {
       const row = parseInt(e.target.dataset.row);
       const col = parseInt(e.target.dataset.col);
   
-      if (gameState[row][col] === "") {
-        gameState[row][col] = currentPlayer;
+      if (boardState[row][col] === "") {
+        boardState[row][col] = currentPlayer;
         e.target.textContent = currentPlayer;
         if (checkWinner()) {
             alert(`${currentPlayer} wins!`);
             resetGame();
         } else {
             currentPlayer = currentPlayer === "X" ? "O" : "X";
-            if (gameState.flat().every((cell) => cell !== "")) {
+            if (boardState.flat().every((cell) => cell !== "")) {
               alert("It's a draw!");
               resetGame();
             }
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   
     const resetGame = () => {
-      gameState = [
+      boardState = [
         ["", "", ""],
         ["", "", ""],
         ["", "", ""],
