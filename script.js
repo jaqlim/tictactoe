@@ -9,43 +9,21 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
   
     const checkWinner = () => {
-      for (let row = 0; row < 3; row++) {
-        if (
-          boardState[row][0] !== "" &&
-          boardState[row][0] === boardState[row][1] &&
-          boardState[row][0] === boardState[row][2]
-        ) {
-          return true;
-        }
-      }
-  
-      for (let col = 0; col < 3; col++) {
-        if (
-          boardState[0][col] !== "" &&
-          boardState[0][col] === boardState[1][col] &&
-          boardState[0][col] === boardState[2][col]
-        ) {
-          return true;
-        }
-      }
-  
-      if (
-        boardState[0][0] !== "" &&
-        boardState[0][0] === boardState[1][1] &&
-        boardState[0][0] === boardState[2][2]
-      ) {
-        return true;
-      }
-  
-      if (
-        boardState[0][2] !== "" &&
-        boardState[0][2] === boardState[1][1] &&
-        boardState[0][2] === boardState[2][0]
-      ) {
-        return true;
-        }
-        return false;
-    };
+      const check = (a, b, c) => a !== "" && a === b && a === c;
+    
+      return (
+        check(boardState[0][0], boardState[0][1], boardState[0][2]) ||
+        check(boardState[1][0], boardState[1][1], boardState[1][2]) ||
+        check(boardState[2][0], boardState[2][1], boardState[2][2]) ||
+        
+        check(boardState[0][0], boardState[1][0], boardState[2][0]) ||
+        check(boardState[0][1], boardState[1][1], boardState[2][1]) ||
+        check(boardState[0][2], boardState[1][2], boardState[2][2]) ||
+        
+        check(boardState[0][0], boardState[1][1], boardState[2][2]) ||
+        check(boardState[0][2], boardState[1][1], boardState[2][0])
+      );
+    };    
   
     const cellClick = (e) => {
       const row = parseInt(e.target.dataset.row);
