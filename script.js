@@ -70,6 +70,20 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
 
+    const updateBoard = (moveIndex) => {
+      resetGame();
+      for (let i = 0; i <= moveIndex; i++) {
+        const move = moveHistory[i];
+        boardState[move.row][move.col] = move.player;
+        const cell = gameBoard.querySelector(
+          `[data-row="${move.row}"][data-col="${move.col}"]`
+        );
+        cell.textContent = move.player;
+      }
+      currentMoveIndex = moveIndex;
+    };
+    
+
     const saveMove = (player, row, col) => {
       moveHistory.push({ player, row, col });
     };
