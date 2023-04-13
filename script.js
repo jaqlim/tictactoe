@@ -36,8 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (boardState[row][col] === "") {
         boardState[row][col] = currentPlayer;
         e.target.textContent = currentPlayer;
-    
-        // Save the move
         saveMove(currentPlayer, row, col);
     
         if (checkWinner()) {
@@ -111,10 +109,14 @@ document.addEventListener("DOMContentLoaded", () => {
       ];
       currentPlayer = "X";
       moveHistory = [];
+      currentMoveIndex = 0;
+      previousButton.disabled = true;
+      nextButton.disabled = true;
       Array.from(gameBoard.children).forEach((cell) => {
         cell.textContent = "";
       });
     };
+    
 
     const onPreviousClick = () => {
       const newIndex = currentMoveIndex - 1;
@@ -129,6 +131,19 @@ document.addEventListener("DOMContentLoaded", () => {
         updateBoard(newIndex);
       }
     };
+
+    previousButton.addEventListener("click", () => {
+      onPreviousClick();
+      previousButton.disabled = currentMoveIndex === 0;
+      nextButton.disabled = false;
+    });
+    
+    nextButton.addEventListener("click", () => {
+      onNextClick();
+      previousButton.disabled = false;
+      nextButton.disabled = currentMoveIndex === moveHistory.length - 1;
+    });
+    
     
   
     createBoard();
