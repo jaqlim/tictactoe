@@ -28,23 +28,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const cellClick = (e) => {
       const row = parseInt(e.target.dataset.row);
       const col = parseInt(e.target.dataset.col);
-  
+    
       if (boardState[row][col] === "") {
         boardState[row][col] = currentPlayer;
         e.target.textContent = currentPlayer;
         if (checkWinner()) {
-            alert(`${currentPlayer} wins!`);
-            resetGame();
+          showToast(`${currentPlayer} wins!`);
+          resetGame();
         } else {
-            currentPlayer = currentPlayer === "X" ? "O" : "X";
-            if (boardState.flat().every((cell) => cell !== "")) {
-              alert("It's a draw!");
-              resetGame();
-            }
+          currentPlayer = currentPlayer === "X" ? "O" : "X";
+          if (boardState.flat().every((cell) => cell !== "")) {
+            showToast("It's a draw!");
+            resetGame();
           }
         }
       }
-  
+    };
+      
     const createCell = (row, col) => {
       const cell = document.createElement("div");
       cell.classList.add("cell");
@@ -61,6 +61,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     };
+
+    const showToast = (message) => {
+      const toast = document.createElement("div");
+      toast.classList.add("toast");
+      toast.textContent = message;
+    
+      document.body.appendChild(toast);
+    
+      setTimeout(() => {
+        toast.classList.add("fadeOut");
+        setTimeout(() => {
+          document.body.removeChild(toast);
+        }, 500);
+      }, 3000);
+    };    
   
     const resetGame = () => {
       boardState = [
