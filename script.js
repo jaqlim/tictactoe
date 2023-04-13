@@ -2,6 +2,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const gameBoard = document.getElementById("game-board");
     const resetButton = document.getElementById("reset");
     let currentPlayer = "X";
+    const previousButton = document.getElementById("previous");
+    const nextButton = document.getElementById("next");
+    let currentMoveIndex = 0;
     let moveHistory = [];
     let boardState = [
       ["", "", ""],
