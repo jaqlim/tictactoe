@@ -36,20 +36,26 @@ document.addEventListener("DOMContentLoaded", () => {
       if (boardState[row][col] === "") {
         boardState[row][col] = currentPlayer;
         e.target.textContent = currentPlayer;
+    
         saveMove(currentPlayer, row, col);
     
         if (checkWinner()) {
           showToast(`${currentPlayer} wins!`);
-          resetGame();
+          previousButton.disabled = false;
+          nextButton.disabled = currentMoveIndex === 0;
+          return;
         } else {
           currentPlayer = currentPlayer === "X" ? "O" : "X";
           if (boardState.flat().every((cell) => cell !== "")) {
             showToast("It's a draw!");
-            resetGame();
+            previousButton.disabled = false;
+            nextButton.disabled = currentMoveIndex === 0;
+            return;
           }
         }
       }
     };
+    
     
     const createCell = (row, col) => {
       const cell = document.createElement("div");
