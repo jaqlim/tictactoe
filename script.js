@@ -81,17 +81,21 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const updateBoard = (moveIndex) => {
-      resetGame();
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+          boardState[row][col] = "";
+        }
+      }
+    
       for (let i = 0; i <= moveIndex; i++) {
         const move = moveHistory[i];
         boardState[move.row][move.col] = move.player;
-        const cell = gameBoard.querySelector(
-          `[data-row="${move.row}"][data-col="${move.col}"]`
-        );
-        cell.textContent = move.player;
       }
+    
+      setBoardState();
       currentMoveIndex = moveIndex;
     };
+    
     
 
     const saveMove = (player, row, col) => {
@@ -145,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const newIndex = currentMoveIndex + 1;
       if (newIndex < moveHistory.length) {
         updateBoard(newIndex);
+        currentPlayer = moveHistory[newIndex].player === "X" ? "O" : "X";
       }
     };
 
@@ -159,6 +164,14 @@ document.addEventListener("DOMContentLoaded", () => {
       previousButton.disabled = false;
       nextButton.disabled = currentMoveIndex === moveHistory.length - 1;
     });
+
+    const setBoardState = () => {
+      Array.from(gameBoard.children).forEach((cell) => {
+        const row = parseInt(cell.dataset.row);
+        const col = parseInt(cell.dataset.col);
+        cell.textContent = boardState[row][col];
+      });
+    };
     
     
   
