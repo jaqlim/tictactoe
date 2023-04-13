@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextButton = document.getElementById("next");
     let currentMoveIndex = 0;
     let moveHistory = [];
+    let gameOver = false;
     let boardState = [
       ["", "", ""],
       ["", "", ""],
@@ -30,6 +31,10 @@ document.addEventListener("DOMContentLoaded", () => {
     };    
   
     const cellClick = (e) => {
+      if (gameOver) {
+        return;
+      }
+    
       const row = parseInt(e.target.dataset.row);
       const col = parseInt(e.target.dataset.col);
     
@@ -41,6 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
         if (checkWinner()) {
           showToast(`${currentPlayer} wins!`);
+          gameOver = true;
           previousButton.disabled = false;
           nextButton.disabled = currentMoveIndex === 0;
           return;
@@ -48,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
           currentPlayer = currentPlayer === "X" ? "O" : "X";
           if (boardState.flat().every((cell) => cell !== "")) {
             showToast("It's a draw!");
+            gameOver = true;
             previousButton.disabled = false;
             nextButton.disabled = currentMoveIndex === 0;
             return;
@@ -55,7 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     };
-    
     
     const createCell = (row, col) => {
       const cell = document.createElement("div");
@@ -118,18 +124,22 @@ document.addEventListener("DOMContentLoaded", () => {
       currentMoveIndex = 0;
       previousButton.disabled = true;
       nextButton.disabled = true;
+      gameOver = false;
       Array.from(gameBoard.children).forEach((cell) => {
         cell.textContent = "";
       });
     };
+    
     
 
     const onPreviousClick = () => {
       const newIndex = currentMoveIndex - 1;
       if (newIndex >= 0) {
         updateBoard(newIndex);
+        currentPlayer = moveHistory[newIndex].player === "X" ? "O" : "X";
       }
     };
+    
     
     const onNextClick = () => {
       const newIndex = currentMoveIndex + 1;
