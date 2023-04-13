@@ -115,6 +115,21 @@ document.addEventListener("DOMContentLoaded", () => {
         cell.textContent = "";
       });
     };
+
+    const onPreviousClick = () => {
+      const newIndex = currentMoveIndex - 1;
+      if (newIndex >= 0) {
+        updateBoard(newIndex);
+      }
+    };
+    
+    const onNextClick = () => {
+      const newIndex = currentMoveIndex + 1;
+      if (newIndex < moveHistory.length) {
+        updateBoard(newIndex);
+      }
+    };
+    
   
     createBoard();
   
