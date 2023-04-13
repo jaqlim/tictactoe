@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const gameBoard = document.getElementById("game-board");
     const resetButton = document.getElementById("reset");
     let currentPlayer = "X";
+    let moveHistory = [];
     let boardState = [
       ["", "", ""],
       ["", "", ""],
@@ -32,6 +33,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (boardState[row][col] === "") {
         boardState[row][col] = currentPlayer;
         e.target.textContent = currentPlayer;
+    
+        // Save the move
+        saveMove(currentPlayer, row, col);
+    
         if (checkWinner()) {
           showToast(`${currentPlayer} wins!`);
           resetGame();
@@ -44,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
     };
-      
+    
     const createCell = (row, col) => {
       const cell = document.createElement("div");
       cell.classList.add("cell");
@@ -62,6 +67,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
 
+    const saveMove = (player, row, col) => {
+      moveHistory.push({ player, row, col });
+    };
+    
     const showToast = (message) => {
       const toast = document.createElement("div");
       toast.classList.add("toast");
@@ -84,6 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ["", "", ""],
       ];
       currentPlayer = "X";
+      moveHistory = [];
       Array.from(gameBoard.children).forEach((cell) => {
         cell.textContent = "";
       });
