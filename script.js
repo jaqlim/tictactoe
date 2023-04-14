@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
           showToast(`${currentPlayer} wins!`);
           gameOver = true;
           previousButton.disabled = false;
-          nextButton.disabled = currentMoveIndex === 0;
+          nextButton.disabled = true; 
           return;
         } else {
           currentPlayer = currentPlayer === "X" ? "O" : "X";
@@ -56,21 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
             showToast("It's a draw!");
             gameOver = true;
             previousButton.disabled = false;
-            nextButton.disabled = currentMoveIndex === 0;
+            nextButton.disabled = true; 
             return;
           }
         }
       }
     };
     
-    const createCell = (row, col) => {
-      const cell = document.createElement("div");
-      cell.classList.add("cell");
-      cell.dataset.row = row;
-      cell.dataset.col = col;
-      cell.addEventListener("click", cellClick);
-      return cell;
-    };
   
     const createBoard = () => {
       for (let row = 0; row < 3; row++) {
@@ -78,6 +70,15 @@ document.addEventListener("DOMContentLoaded", () => {
           gameBoard.appendChild(createCell(row, col));
         }
       }
+    };
+
+    const createCell = (row, col) => {
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
+      cell.dataset.row = row;
+      cell.dataset.col = col;
+      cell.addEventListener("click", cellClick);
+      return cell;
     };
 
     const updateBoard = (moveIndex) => {
@@ -96,8 +97,6 @@ document.addEventListener("DOMContentLoaded", () => {
       currentMoveIndex = moveIndex;
     };
     
-    
-
     const saveMove = (player, row, col) => {
       moveHistory.push({ player, row, col });
     };
@@ -134,9 +133,11 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     };
     
-    
-
     const onPreviousClick = () => {
+      if (gameOver && currentMoveIndex === moveHistory.length - 1) {
+        currentMoveIndex -= 1;
+        gameOver = false;
+      }
       const newIndex = currentMoveIndex - 1;
       if (newIndex >= 0) {
         updateBoard(newIndex);
@@ -146,25 +147,25 @@ document.addEventListener("DOMContentLoaded", () => {
     
     
     const onNextClick = () => {
-      const newIndex = currentMoveIndex + 1;
-      if (newIndex < moveHistory.length) {
-        updateBoard(newIndex);
-        currentPlayer = moveHistory[newIndex].player === "X" ? "O" : "X";
+      if (currentMoveIndex < moveHistory.length - 1) {
+        currentMoveIndex += 1;
+        updateBoard(currentMoveIndex);
+        currentPlayer = moveHistory[currentMoveIndex].player === "X" ? "O" : "X";
       }
     };
-
+    
     previousButton.addEventListener("click", () => {
       onPreviousClick();
       previousButton.disabled = currentMoveIndex === 0;
-      nextButton.disabled = false;
+      nextButton.disabled = currentMoveIndex === moveHistory.length - 1;
     });
     
     nextButton.addEventListener("click", () => {
       onNextClick();
-      previousButton.disabled = false;
+      previousButton.disabled = currentMoveIndex === 0;
       nextButton.disabled = currentMoveIndex === moveHistory.length - 1;
     });
-
+    
     const setBoardState = () => {
       Array.from(gameBoard.children).forEach((cell) => {
         const row = parseInt(cell.dataset.row);
@@ -173,8 +174,6 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     };
     
-    
-  
     createBoard();
   
     resetButton.addEventListener("click", () => {
