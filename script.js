@@ -47,21 +47,24 @@ document.addEventListener("DOMContentLoaded", () => {
         if (checkWinner()) {
           showToast(`${currentPlayer} wins!`);
           gameOver = true;
+          currentMoveIndex = moveHistory.length - 1;
           previousButton.disabled = false;
-          nextButton.disabled = true; 
+          nextButton.disabled = true;
           return;
         } else {
           currentPlayer = currentPlayer === "X" ? "O" : "X";
           if (boardState.flat().every((cell) => cell !== "")) {
             showToast("It's a draw!");
             gameOver = true;
+            currentMoveIndex = moveHistory.length - 1;
             previousButton.disabled = false;
-            nextButton.disabled = true; 
+            nextButton.disabled = true;
             return;
           }
         }
       }
     };
+    
     
   
     const createBoard = () => {
@@ -134,16 +137,19 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     
     const onPreviousClick = () => {
-      if (gameOver && currentMoveIndex === moveHistory.length - 1) {
-        currentMoveIndex -= 1;
+      if (gameOver) {
+        currentMoveIndex = moveHistory.length - 2;
         gameOver = false;
+      } else {
+        currentMoveIndex -= 1;
       }
-      const newIndex = currentMoveIndex - 1;
-      if (newIndex >= 0) {
-        updateBoard(newIndex);
-        currentPlayer = moveHistory[newIndex].player === "X" ? "O" : "X";
+    
+      if (currentMoveIndex >= 0) {
+        updateBoard(currentMoveIndex);
+        currentPlayer = moveHistory[currentMoveIndex].player === "X" ? "O" : "X";
       }
     };
+    
     
     
     const onNextClick = () => {
